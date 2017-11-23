@@ -26,6 +26,7 @@ setup(
         ]
     },
     install_requires=[
+        'typing'
     ],
     keywords='REST HATEOAS Hypermedia RESTful SIREN HAL API JSONAPI web framework Django Flask SQLAlchemy Cassandra',
     name='pysiren',
