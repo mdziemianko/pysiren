@@ -182,10 +182,10 @@ class SirenEntity(RendererMixin, SirenBase):
     # entities
     # actions
     # links
-    _class: List[str] = []
-    _title: str = ''
-    _properties: Dict[str, str] = {}
-    _entities: List[object] = []
+    # _class: List[str] = []
+    # _title: str = ''
+    # _properties: Dict[str, str] = {}
+    # _entities: List[object] = []
 
     def __init__(self,
                  classes: List[str],
