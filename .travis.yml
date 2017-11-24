@@ -1,13 +1,19 @@
 language: python
 python:
-  - "3.6"
-  - "3.5"
-  - "3.4"
-  - "pypy3"
+- '3.6'
+- '3.5'
+- '3.4'
+- pypy3
 install:
-  - pip install nose coveralls
-  - python setup.py -q install
+- pip install nose coveralls
+- python setup.py -q install
 script:
-  - coverage run --source=ripozo setup.py nosetests
-after_success:
-  coveralls
+- coverage run --source=ripozo setup.py nosetests
+after_success: coveralls
+deploy:
+  provider: pypi
+  on:
+    tags: true
+  user: mdziemianko
+  password:
+    secure: D+glv/fSiJPpYT3Jg3lBoM79wuAyj6kui60MKf49B8TzuQKd5prDRREsKry9uX1lgXcJQn4uhxecFzQoE8yiOmURCAjJ19eJRVmAgNLNO/xH8I6Q5osxvKRXYgAb5YeDI1TKc8fycwqdIx3t7oOvhTe9lCQBeShLCdK16wCY8iSnwYbYY9wREuL5Jr2US49ZzDFe3GRwj3Vk4Qm5ptZwhzJX4z2vfPDPTv6UN7RPsztVjOdmIP1ZbHYECx+TFvUy3JwsHlo0PRUPbUluqcYrT9tHmuaSkgMlIYgoCWECEEpjab0V2YK68nKm3En4pxi71m1eYepcv9nPOaliO4qSHQ8lAeONYp3ONpdK27Hq3+oKG2eLw0e0OrL14WZZ79UO/8QOHvpHykMmVM9YysLiHiy4d+bR6WA0FOaorfGogBXBIwWYFnjBiki11MG0OgFs9M9A2BLY7gdygSbASfIqtMYM5LgvbralLr3fg7xSNTdBN3HQeTlRGL85tlK4FAWpugSvjxqH23PuyHo5XOTmixlXLyvx68DPOrhjkMpT3JvLmdGTnFOLMtwyg5d1Y/rHJryuZ3QZ95kdm/wu18eXz5lScIwST0Noi9yOTRh4GKC3DKL9Lm3Q2aaD5fV7MmOMLvrP9QhAykl1kjfPvrvb//kv+ieeicPkzFQ6ZDpsjbY=
