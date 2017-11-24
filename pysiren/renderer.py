@@ -48,6 +48,8 @@ class RendererMixin:
             return self.render_list()
         elif type(self).__name__ == 'MediaType': #TODO fix
             return self.render_media_type()
+        elif hasattr(self, 'data'):
+            return self.data
 
         return self
 
