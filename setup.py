@@ -10,7 +10,7 @@ setup(
     author_email='michal.dziemianko@gmail.com',
     classifiers=[
         'Development Status :: 3 - Alpha',
-        'License :: OSI Approved :: Apache License 2.0',
+        'License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
@@ -28,7 +28,7 @@ setup(
     install_requires=[
         'typing'
     ],
-    keywords='REST HATEOAS Hypermedia RESTful SIREN HAL API JSONAPI web framework Django Flask SQLAlchemy Cassandra',
+    keywords='REST HATEOAS Hypermedia RESTful SIREN HAL API JSONAPI web framework',
     name='pysiren',
     packages=find_packages(include=['pysiren', 'pysiren.*']),
     tests_require=[
