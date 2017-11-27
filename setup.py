@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 __author__ = 'Michal Dziemianko'
 __pkg_name__ = 'pysiren'
 
-version = '0.1.1'
+version = '0.2.0'
 
 setup(
     author=__author__,
@@ -33,6 +33,7 @@ setup(
     packages=find_packages(include=['pysiren', 'pysiren.*']),
     tests_require=[
         'nose',
+        'hypothesis'
     ],
     test_suite="test",
     url='https://github.com/mdziemianko/pysiren',

@@ -1,118 +1,12 @@
-from typing import Dict, List
-from enum import Enum
 import re
-from .renderer import SirenBase
-from .renderer import RendererMixin
+from enum import Enum
+from typing import Dict, List
 
-class SirenError(Exception):
-    pass
-
-
-class SirenEntityError(SirenError):
-    pass
-
-
-class SirenMediaTypeError(SirenError):
-    pass
-
-
-_media_type_pattern = re.compile("^(application|audio|image|message|model|multipart|text|video)\\/([A-Z]|[a-z]|[0-9]|[\\!\\#\\$\\&\\.\\+\\-\\^\\_]){1,127}(; ?(([\\!\\#\\$\\%\\&\\'\\(\\)\\*\\+-\\.\\/]|[0-9]|[A-Z]|[\\^\\_\\`\\]\\|]|[a-z]|[\\|\\~])+)+=((([\\!\\#\\$\\%\\&\\'\\(\\)\\*\\+-\\.\\/]|[0-9]|[A-Z]|[\\^\\_\\`\\]\\|]|[a-z]|[\\|\\~])+)|\"([\\!\\#\\$\\%\\&\\.\\(\\)\\*\\+\\,\\-\\.\\/]|[0-9]|[\\:\\;\\<\\=\\>\\?\\@]|[A-Z]|[\\[\\\\\\]\\^\\_\\`]|[a-z]|[\\{\\|\\}\\~])+\"))*$")
-
-
-
-
-
-class MediaType(RendererMixin):
-    def __init__(self, type):
-        if _media_type_pattern.match(type) is None:
-            raise SirenMediaTypeError("Invalid Media Type [%s]", type)
-        else:
-            self._type = type
-
-    def get_type(self):
-        return self._type
-
-class RelValue(Enum):
-    ABOUT = "about"
-    #ALTERNATE = "alternate",
-    APPENDIX = "appendix"
-    #"archives",
-    AUTHOR = "author"
-    #"blocked-by",
-    #"bookmark",
-    #"canonical",
-    #"chapter",
-    COLLECTION = "collection"
-    CONTENTS = "contents"
-    #"convertedFrom",
-    #"copyright",
-    #"create-form",
-    #"current",
-    DERIVED_FROM = "derivedfrom"
-    DESCRIBED_BY = "describedby"
-    DESCRIBES = "describes"
-    #"disclosure",
-    #"dns-prefetch",
-    #"duplicate",
-    EDIT = "edit"
-    EDIT_FORM = "edit-form"
-    #"edit-media",
-    #"enclosure",
-    FIRST = "first"
-    GLOSSARY = "glossary"
-    HELP = "help"
-    #"hosts",
-    #"hub",
-    #"icon",
-    INDEX = "index"
-    ITEM = "item"
-    LAST = "last"
-    LATEST_VERSION = "latest-version"
-    LICENSE = "license"
-    #"lrdd",
-    #"memento",
-    #"monitor",
-    #"monitor-group",
-    NEXT = "next"
-    #"next-archive",
-    #"nofollow",
-    #"noreferrer",
-    #"original",
-    #"payment",
-    #"pingback",
-    #"preconnect",
-    #"predecessor-version",
-    #"prefetch",
-    #"preload",
-    #"prerender",
-    PREV = "prev"
-    PREVIEW = "preview"
-    PREVIOUS = "previous"
-    #"prev-archive",
-    #"privacy-policy",
-    PROFILE = "profile"
-    RELATED = "related"
-    #"restconf",
-    #"replies",
-    SEARCH = "search"
-    #"section",
-    SELF = "self"
-    #"service",
-    #"start",
-    #"stylesheet",
-    #"subsection",
-    #"successor-version",
-    #"tag",
-    #"terms-of-service",
-    #"timegate",
-    #"timemap",
-    #"type",
-    UP = "up"
-    #"version-history",
-    #"via",
-    #"webmention",
-    #"working-copy",
-    #"working-copy-of"
+from ..entities.rel import SirenRelValue
+from ..entities.media_type import SirenMediaType
+from ..error import *
+from ..renderer import RendererMixin
+from ..renderer import SirenBase
 
 
 class Method(Enum):
@@ -123,7 +17,7 @@ class Method(Enum):
     PUT = 'PUT'
 
 class SirenLink(RendererMixin, SirenBase):
-    def __init__(self, rel: List[RelValue], href: str, title: str=None, type: MediaType=None, classes: List[str]=None):
+    def __init__(self, rel: List[SirenRelValue], href: str, title: str=None, type: SirenMediaType=None, classes: List[str]=None):
         self._rel = rel
         self._href = href
         self._title = title
@@ -166,7 +60,7 @@ class Field(RendererMixin, SirenBase):
 class SirenAction(RendererMixin, SirenBase):
     def __init__(self, name: str, href: str,
                  title: str=None, method: Method=Method.GET,
-                 classes: List[str]=None, type: MediaType=MediaType('application/x-www-form-urlencoded'), fields: List[Field]=None):
+                 classes: List[str]=None, type: SirenMediaType=SirenMediaType('application/x-www-form-urlencoded'), fields: List[Field]=None):
         self._name = name
         self._href = href
         self._title = title
@@ -233,7 +127,7 @@ class EmbeddedLinkSubEntity(SirenSubEntity, RendererMixin):
 class EmbeddedRepresentationSubEntity(SirenSubEntity, RendererMixin):
     def __init__(self,
                  classes: List[str],
-                 rel: RelValue,
+                 rel: SirenRelValue,
                  title: str = None,
                  properties: Dict[str, object] = None,
                  entities: List[SirenSubEntity] = None,

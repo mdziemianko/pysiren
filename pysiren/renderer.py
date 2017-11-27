@@ -2,8 +2,10 @@ from collections import UserList, UserDict, UserString
 
 from enum import Enum
 
+
 class SirenBase:
     pass
+
 
 class UserInt(int):
     pass
@@ -46,8 +48,6 @@ class RendererMixin:
             return self.render_dict()
         elif isinstance(self, UserList):
             return self.render_list()
-        elif type(self).__name__ == 'MediaType': #TODO fix
-            return self.render_media_type()
         elif hasattr(self, 'data'):
             return self.data
 
