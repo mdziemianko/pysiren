@@ -100,14 +100,14 @@ def test_pagination_set(i):
 
 @given(integers(min_value=51, max_value=53))
 def test_pagination_set_last_pages_count(i):
-    expected = dict(
-        **{
+    expected = {
             'first': 1,
             'prev': i - 1,
             'self': i,
             'last': 53
-        },
-        **({'next': i + 1} if i < 53 else {})
-    )
+    }
+    if i < 53:
+        expected['next'] = i + 1
+        
     result = Pagination(i, 10, 53*10).get_pagination_set()
     assert(result == expected)
