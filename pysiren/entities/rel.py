@@ -2,19 +2,18 @@ from ..error import SirenNotUriError
 from enum import Enum
 import re
 
-
-class SirenRelValue:
-    pass
-
-
 _uri_pattern = re.compile(
     """^https?://(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$""")
 
 
-class SirenUriRelValue(SirenRelValue):
+class RelValue:
+    pass
+
+
+class UriRelValue(RelValue):
     def __init__(self, uri):
         if _uri_pattern.match(uri) is None:
-            raise SirenNotUriError("Invalid Media Type [%s]", type)
+            raise SirenNotUriError("Invalid URI [%s]", type)
         self._uri = uri
 
     @property
@@ -22,7 +21,7 @@ class SirenUriRelValue(SirenRelValue):
         return self._uri
 
 
-class SirenPredefRelValue(SirenRelValue, Enum):
+class PredefRelValue(RelValue, Enum):
     ABOUT = "about"
     ALTERNATE = "alternate"
     APPENDIX = "appendix"

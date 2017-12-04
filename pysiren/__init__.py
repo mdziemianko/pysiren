@@ -1,3 +1,2 @@
-from pysiren.entities.entity import *
-from pysiren.entities.rel import *
+from pysiren.entities import *
 from .error import *

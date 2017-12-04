@@ -1,27 +1,28 @@
 from pysiren import *
+from pysiren.renderer import to_renderable
 
 
 def test_siren_render():
-    entity = SirenEntity(['class1', 'class2'])
+    entity = Entity(['class1', 'class2'])
     expected = {'class': ['class1', 'class2']}
-    assert(entity.render() == expected)
+    assert(to_renderable(entity).render() == expected)
 
 
 def test_siren_render_full():
-    entity = SirenEntity(['className'],
+    entity = Entity(['className'],
                          title='entityTitle',
                          links=[
-                             SirenLink([SirenPredefRelValue.NEXT], "next/link",
+                             Link([PredefRelValue.NEXT], "next/link",
                                        title="Link to next",
-                                       type=SirenMediaType("application/json"),
+                                       type=MediaType("application/json"),
                                        classes=["c1", "c2"])
                          ],
                          actions=[
-                             SirenAction("add-item",
+                             Action("add-item",
                                          href="http://api.com/add",
                                          title="Add Item",
                                          method=Method.POST,
-                                         type=SirenMediaType('application/x-www-form-urlencoded'),
+                                         type=MediaType('application/x-www-form-urlencoded'),
                                          fields=[
                                              Field("orderNumber", type=FieldType.HIDDEN, value=42),
                                              Field("productCode", type=FieldType.TEXT),
@@ -52,5 +53,5 @@ def test_siren_render_full():
         ],
     }
 
-    result = entity.render()
+    result = to_renderable(entity).render()
     assert(expected == result)

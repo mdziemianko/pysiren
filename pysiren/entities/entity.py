@@ -1,95 +1,28 @@
-import re
-from enum import Enum
 from typing import Dict, List
 
-from ..entities.rel import SirenRelValue
-from ..entities.media_type import SirenMediaType
 from ..error import *
-from ..renderer import RendererMixin
 from ..renderer import SirenBase
+from .link import Link
+from .action import Action
+from .rel import RelValue
 
 
-class Method(Enum):
-    DELETE = 'DELETE'
-    GET = 'GET'
-    PATCH = 'PATCH'
-    POST = 'POST'
-    PUT = 'PUT'
-
-class SirenLink(RendererMixin, SirenBase):
-    def __init__(self, rel: List[SirenRelValue], href: str, title: str=None, type: SirenMediaType=None, classes: List[str]=None):
-        self._rel = rel
-        self._href = href
-        self._title = title
-        self._type = type
-        self._class = classes
-
-
-class FieldType(Enum):
-    HIDDEN = "hidden"
-    TEXT = "text"
-    SEARCH = "search"
-    TEL = "tel"
-    URL = "url"
-    EMAIL = "email"
-    PASSWORD = "password"
-    DATETIME = "datetime"
-    DATE = "date"
-    MONTH = "month"
-    WEEK = "week"
-    TIME = "time"
-    DATETIME_LOCAL = "datetime-local"
-    NUMBER = "number"
-    RANGE = "range"
-    COLOR = "color"
-    CHECKBOX = "checkbox"
-    RADIO = "radio"
-    FILE = "file"
-
-
-
-
-class Field(RendererMixin, SirenBase):
-    def __init__(self, name: str, title: str=None, value=None, type: FieldType=FieldType.TEXT):
-        self._name = name
-        self._title = title
-        self._value = value
-        self._type = type
-
-
-class SirenAction(RendererMixin, SirenBase):
-    def __init__(self, name: str, href: str,
-                 title: str=None, method: Method=Method.GET,
-                 classes: List[str]=None, type: SirenMediaType=SirenMediaType('application/x-www-form-urlencoded'), fields: List[Field]=None):
-        self._name = name
-        self._href = href
-        self._title = title
-        self._method = method
-        self._class = classes
-        self._type = type
-        self._fields = fields
-
-class SirenEntity(RendererMixin, SirenBase):
-    # class
-    # title
-    # properties
-    # entities
-    # actions
-    # links
-    # _class: List[str] = []
-    # _title: str = ''
-    # _properties: Dict[str, str] = {}
-    # _entities: List[object] = []
-
+class Entity(SirenBase):
     def __init__(self,
                  classes: List[str],
                  title: str=None,
                  properties: Dict[str, object]=None,
-                 entities: List[object]=None,
-                 links: List[SirenLink]=None,
-                 actions: List[SirenAction] = None):
+                 entities: List["Entity"]=None,
+                 links: List[Link]=None,
+                 actions: List[Action] = None):
         self._class = classes
         self._title = title
+
+        self._properties = None
+        self._entities = None
+        self._links = None
+        self._actions = None
+
         self.set_properties(properties)
         self.set_entities(entities)
         self._links = links
@@ -116,22 +49,59 @@ class SirenEntity(RendererMixin, SirenBase):
     def set_entities(self, entities):
         self._entities = entities
 
+    def add_entity(self, entity: 'Entity'):
+        if self._entities is None:
+            self.set_entities([entity])
+        else:
+            self._entities.append(entity)
 
-class SirenSubEntity(SirenEntity, RendererMixin):
+    def set_links(self, links: List[Link]):
+        if links is not None and type(links) != list:
+            raise SirenEntityError("Links are of type {}, list expected!", type(list))
+
+        self._links = links
+
+    def set_actions(self, actions: List[Action]):
+        if actions is not None and type(actions) != list:
+            raise SirenEntityError("Actions are of type {}, list expected!", type(actions))
+
+        self._actions = actions
+
+    def add_link(self, link: Link):
+        if self._links is None:
+            self.set_links([link])
+        else:
+            self._links.append(link)
+
+    def add_action(self, action: Action):
+        if self._actions is None:
+            self.set_actions([action])
+        else:
+            self._actions.append(action)
+
+    def get_links(self):
+        return self._links
+
+    def get_actions(self):
+        return self._actions
+
+
+class SubEntity(Entity):
     pass
 
-class EmbeddedLinkSubEntity(SirenSubEntity, RendererMixin):
+
+class EmbeddedLinkSubEntity(SubEntity):
     pass
 
 
-class EmbeddedRepresentationSubEntity(SirenSubEntity, RendererMixin):
+class EmbeddedRepresentationSubEntity(SubEntity):
     def __init__(self,
                  classes: List[str],
-                 rel: SirenRelValue,
+                 rel: RelValue,
                  title: str = None,
                  properties: Dict[str, object] = None,
-                 entities: List[SirenSubEntity] = None,
-                 links: List[SirenLink] = None,
-                 actions:List[SirenAction] = None):
-        SirenEntity.__init__(self, classes, title, properties, entities, links, actions)
+                 entities: List[SubEntity] = None,
+                 links: List[Link] = None,
+                 actions:List[Action] = None):
+        Entity.__init__(self, classes, title, properties, entities, links, actions)
         self._rel = rel
