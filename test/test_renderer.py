@@ -17,6 +17,12 @@ def test_siren_render_full():
                                        type=MediaType("application/json"),
                                        classes=["c1", "c2"])
                          ],
+                         properties={
+                            'bool': True,
+                            'int': 1,
+                            'text': 'gfdgd',
+                            'float': 0.232
+                         },
                          actions=[
                              Action("add-item",
                                          href="http://api.com/add",
@@ -37,6 +43,12 @@ def test_siren_render_full():
         'links': [
             {'rel': ["next"], 'href': 'next/link', 'title':'Link to next', 'type': 'application/json', 'class': ['c1', 'c2']}
         ],
+        'properties': {
+            'bool': True,
+            'int': 1,
+            'text': 'gfdgd',
+            'float': 0.232
+        },
         "actions": [
             {
                 "name": "add-item",
@@ -54,4 +66,8 @@ def test_siren_render_full():
     }
 
     result = to_renderable(entity).render()
+    import json
+    print(json.dumps(result))
+    print(json.dumps(expected))
+
     assert(expected == result)

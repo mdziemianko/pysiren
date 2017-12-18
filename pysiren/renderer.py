@@ -11,6 +11,13 @@ class UserInt(int):
     pass
 
 
+class UserBool:
+    def __init__(self, b):
+        self.data = b
+
+class UserFloat(float):
+    pass
+
 # TODO: get rid of this nonsense
 def to_renderable(v):
     if not issubclass(v.__class__, RendererMixin):
@@ -22,9 +29,16 @@ def to_renderable(v):
             v = UserString(v)
         elif type(v) == int:
             v = UserInt(v)
+        elif type(v) == float:
+            v = UserFloat(v)
+        elif type(v) == bool:
+            v = UserBool(v)
         elif issubclass(v.__class__, Enum):
             v = UserString(v.value)
-        v.__class__ = type('Renderable{}'.format(v.__class__.__name__), (v.__class__, RendererMixin), {})
+        try:
+            v.__class__ = type('Renderable{}'.format(v.__class__.__name__), (v.__class__, RendererMixin), {})
+        except Exception as e:
+            print(v)
     return v
 
 
