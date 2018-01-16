@@ -40,6 +40,15 @@ def test_has_prev_next_edges():
     assert (not pagination.has_next)
 
 
+def test_when_no_total_known():
+    pagination = Pagination(1, 25, None)
+    assert(not pagination.has_prev)
+    assert pagination.has_next
+
+    assert pagination.next() == 2
+    assert pagination.offset() == 0
+
+
 @given(integers(min_value=2, max_value=50))
 def test_has_prev_next(i):
     pagination = Pagination(i, 5, 5*50 + 1)

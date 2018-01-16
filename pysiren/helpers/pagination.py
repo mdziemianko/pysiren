@@ -4,10 +4,16 @@ from math import ceil
 class Pagination:
     def __init__(self, page, page_size, total):
         self.page_size = max(page_size, 1)
-        self.total = max(total, 0)
 
-        self.pages_count = int(ceil(self.total / float(self.page_size)))
-        self.page = min(max(1, page), max(self.pages_count, 1))
+        # handling case when the total is not known up front
+        if total is not None:
+            self.total = max(total, 0)
+            self.pages_count = int(ceil(self.total / float(self.page_size)))
+            self.page = min(max(1, page), max(self.pages_count, 1))
+        else:
+            self.total = None
+            self.pages_count = None
+            self.page = max(1, page)
 
     def prev(self):
         return self.page - 1 if self.has_prev else None
@@ -21,7 +27,7 @@ class Pagination:
 
     @property
     def has_next(self):
-        return self.page < self.pages_count
+        return self.pages_count is None or self.page < self.pages_count
 
     def offset(self):
         return self.page_size * (self.page - 1)
