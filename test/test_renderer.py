@@ -19,9 +19,11 @@ def test_siren_render_full():
                          ],
                          properties={
                             'bool': True,
+                            'bool2': False,
                             'int': 1,
                             'text': 'gfdgd',
-                            'float': 0.232
+                            'float': 0.232,
+                            'empty': []
                          },
                          actions=[
                              Action("add-item",
@@ -45,9 +47,11 @@ def test_siren_render_full():
         ],
         'properties': {
             'bool': True,
+            'bool2': False,
             'int': 1,
             'text': 'gfdgd',
-            'float': 0.232
+            'float': 0.232,
+            'empty': []
         },
         "actions": [
             {

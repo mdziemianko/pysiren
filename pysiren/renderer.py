@@ -15,8 +15,10 @@ class UserBool:
     def __init__(self, b):
         self.data = b
 
+
 class UserFloat(float):
     pass
+
 
 # TODO: get rid of this nonsense
 def to_renderable(v):
@@ -44,13 +46,13 @@ def to_renderable(v):
 
 class RendererMixin:
     def render_list(self):
-        return [to_renderable(v).render() for v in self if v]
+        return [to_renderable(v).render() for v in self if v is not None]
 
     def render_dict(self):
-        return {k: to_renderable(v).render() for k, v in self.items() if v}
+        return {k: to_renderable(v).render() for k, v in self.items() if v is not None}
 
     def render_siren_type(self):
-        return {k[1:]: to_renderable(v).render() for k, v in self.__dict__.items() if v}
+        return {k[1:]: to_renderable(v).render() for k, v in self.__dict__.items() if v is not None}
 
     def render(self):
         if issubclass(self.__class__, SirenBase):
