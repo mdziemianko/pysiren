@@ -6,3 +6,4 @@ from .field_type import FieldType
 from .media_type import MediaType
 from .method import Method
 from .rel import *
+from .field_value_object import FieldValueObject

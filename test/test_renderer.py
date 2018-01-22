@@ -34,7 +34,11 @@ def test_siren_render_full():
                                          fields=[
                                              Field("orderNumber", type=FieldType.HIDDEN, value=42),
                                              Field("productCode", type=FieldType.TEXT),
-                                             Field("quantity", type=FieldType.NUMBER)
+                                             Field("quantity", type=FieldType.NUMBER),
+                                             Field("list", type=FieldType.RADIO, value=[
+                                                 FieldValueObject('val1', title="Value 1", selected=True),
+                                                 FieldValueObject('val2', title="Value 2", selected=False)
+                                             ])
                                          ])
                          ]
     )
@@ -63,7 +67,11 @@ def test_siren_render_full():
                 "fields": [
                     {"name": "orderNumber", "type": "hidden", "value": 42},
                     {"name": "productCode", "type": "text"},
-                    {"name": "quantity", "type": "number"}
+                    {"name": "quantity", "type": "number"},
+                    {"name": "list", "type": "radio", "value": [
+                        {"title": "Value 1", "value": "val1", "selected": True},
+                        {"title": "Value 2", "value": "val2", "selected": False}
+                    ]}
                 ]
             }
         ],
