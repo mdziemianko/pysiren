@@ -1,5 +1,3 @@
-from collections import UserList, UserDict, UserString
-
 from enum import Enum
 
 
@@ -7,62 +5,39 @@ class SirenBase:
     pass
 
 
-class UserInt(int):
-    pass
-
-
-class UserBool:
-    def __init__(self, b):
-        self.data = b
-
-
-class UserFloat(float):
-    pass
-
-
-# TODO: get rid of this nonsense
-def to_renderable(v):
-    if not issubclass(v.__class__, RendererMixin):
-        if type(v) == list:
-            v = UserList(v)
-        elif type(v) == dict:
-            v = UserDict(v)
-        elif type(v) == str:
-            v = UserString(v)
-        elif type(v) == int:
-            v = UserInt(v)
-        elif type(v) == float:
-            v = UserFloat(v)
-        elif type(v) == bool:
-            v = UserBool(v)
-        elif issubclass(v.__class__, Enum):
-            v = UserString(v.value)
-        try:
-            v.__class__ = type('Renderable{}'.format(v.__class__.__name__), (v.__class__, RendererMixin), {})
-        except Exception as e:
-            print(v)
-    return v
-
-
-class RendererMixin:
-    def render_list(self):
-        return [to_renderable(v).render() for v in self if v is not None]
-
-    def render_dict(self):
-        return {k: to_renderable(v).render() for k, v in self.items() if v is not None}
-
-    def render_siren_type(self):
-        return {k[1:]: to_renderable(v).render() for k, v in self.__dict__.items() if v is not None}
+class Renderer:
+    def __init__(self, entity):
+        self.entity = entity
 
     def render(self):
-        if issubclass(self.__class__, SirenBase):
-            return self.render_siren_type()
-        elif isinstance(self, UserDict):
-            return self.render_dict()
-        elif isinstance(self, UserList):
-            return self.render_list()
-        elif hasattr(self, 'data'):
-            return self.data
+        return self._render(self.entity)
 
-        return self
+    def _render(self, e):
+        if isinstance(e, SirenBase):
+            return self._render_object(e.__dict__)
+        elif isinstance(e, dict):
+            return self._render_dict(e)
+        elif isinstance(e, list):
+            return self._render_list(e)
+        elif isinstance(e, Enum):
+            return e.value
+        elif hasattr(e, 'data'):
+            return e.data
+        else:
+            return e
+
+    def _render_list(self, e):
+        return [self._render(v) for v in e if v is not None]
+
+    def _render_dict(self, e):
+        return {k: self._render(v) for k, v in e.items() if v is not None}
+
+    def _render_object(self, e):
+        return {k[1:]: self._render(v) for k, v in e.items() if v is not None}
+
+
+# TODO: remove in next version
+def to_renderable(entity):
+    return Renderer(entity)
+
 

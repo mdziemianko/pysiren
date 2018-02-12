@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 __author__ = 'Michal Dziemianko'
 __pkg_name__ = 'pysiren'
 
-version = '0.3.4'
+version = '0.3.5'
 
 setup(
     author=__author__,
