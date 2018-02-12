@@ -74,4 +74,4 @@ def time_renderer(data):
 def test_performance():
     data = make_data(entity)
     time = time_renderer(data)
-    assert (time < 2.0)
+    assert (time < 3.0)
